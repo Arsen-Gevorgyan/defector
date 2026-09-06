@@ -1,27 +1,32 @@
 export default function bot({ history, memory }) {
-    let move;
-
     if (history.length < 3) {
-        move = Math.random() < 0.5 ? "C" : "D";
-    } 
-    else {
-        const recent = history.slice(-5);
+        return [Math.random() < 0.5 ? "C" : "D", memory];
+    }
 
-        let def = 0;
+    const recent = history.slice(-6);
 
-        for (const round of recent) {
-            if (round.opponent === "D") {
-                ++def;
-            }
-        }
+    let cooperations = 0;
+    let defections = 0;
 
-        if (def >= 3) {
-            move = "D";
-        }
-        else {
-            move = history.at(-1).opponent === "D" ? "D" : "C";
+    for (const round of recent) {
+        if (round.opponent === "C") {
+            cooperations++;
+        } else {
+            defections++;
         }
     }
 
-    return [move, memory];
+    if (defections >= 3) {
+        return ["D", memory];
+    }
+
+    if (cooperations >= 5) {
+        if (Math.random() < 0.25) {
+            return ["D", memory];
+        }
+
+        return ["C", memory];
+    }
+
+    return [history.at(-1).opponent, memory];
 }
