@@ -1,7 +1,9 @@
-export default function bot({history}) {
+export default function bot({ history, memory }) {
     if (history.length === 0) {
-        return "C";
+        return ["C", memory];
     }
-    let move = history.at(-1).opponent === "C" ? "C" : "D";
-    return move;
+
+    const move = history.at(-1).opponent === "C" ? "C" : "D";
+
+    return [move, memory];
 }
