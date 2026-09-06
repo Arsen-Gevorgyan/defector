@@ -1,27 +1,34 @@
 export default function bot({ history, memory }) {
-    if (history.length < 5) {
+    if (history.length < 3) {
         return [Math.random() < 0.5 ? "C" : "D", memory];
     }
 
-    const recent = history.slice(-8);
+    const recent = history.slice(-6);
 
     let cor = 0;
     let def = 0;
 
     for (const round of recent) {
-        if (round.opponent === "C") {
-            ++cor;
-        } else{
+        if (round.opponent === "D") {
             ++def;
+        } else{
+            ++cor;
         }
     }
-
-    if (def >= 6) {
+    let totalDef = 0;
+    for (const round of history) {
+        if (round.opponent === D){
+            ++totalDef;
+        }
+    }
+    const totalRounds = history.length;
+    const defRate = totalDef / totalRounds
+    if (defRate > 0.6 && def >= 2) {
         return ["D", memory];
     }
 
-    if (cor >= 7) {
-        if (Math.random() < 0.25) {
+    if (defRate < 0.4 && cor >= 4) {
+        if (Math.random() < 0.3) {
             return ["D", memory];
         }
         return ["C", memory];
@@ -42,9 +49,7 @@ export default function bot({ history, memory }) {
         }
     }
     
-    const counter = afterC.D > afterC.C && afterD.C > afterD.D;
-
-    if (counter) {
+    if (afterC.D > afterC.C && afterD.C > afterD.D) {
         return [Math.random() < 0.5 ? "C" : "D", memory];
     }
 
