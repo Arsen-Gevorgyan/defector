@@ -3,6 +3,30 @@ export default function bot({ history, memory }) {
         return [Math.random() < 0.5 ? "C" : "D", memory];
     }
 
+    const recent = history.slice(-8);
+
+    let cor = 0;
+    let def = 0;
+
+    for (const round of recent) {
+        if (round.opponent === "C") {
+            ++cor;
+        } else{
+            ++def;
+        }
+    }
+
+    if (def >= 6) {
+        return ["D", memory];
+    }
+
+    if (cor >= 7) {
+        if (Math.random() < 0.25) {
+            return ["D", memory];
+        }
+        return ["C", memory];
+    }
+
     let afterC = { C: 0, D: 0 };
     let afterD = { C: 0, D: 0 };
 
@@ -24,9 +48,5 @@ export default function bot({ history, memory }) {
         return [Math.random() < 0.5 ? "C" : "D", memory];
     }
 
-    if (afterC.C >= afterC.D) {
-        return ["C", memory];
-    }
-
-    return ["D", memory];
+    return [history.at(-1).opponent, memory];
 }
