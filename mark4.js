@@ -17,7 +17,7 @@ export default function bot({ history, memory }) {
     }
     let totalDef = 0;
     for (const round of history) {
-        if (round.opponent === D){
+        if (round.opponent === "D"){
             ++totalDef;
         }
     }
